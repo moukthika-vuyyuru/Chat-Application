@@ -10,7 +10,6 @@ pipeline {
     environment {
         DOCKER_CREDENTIAL_ID = 'docker-cred'
         DOCKER_IMAGE = 'moukthikavuyyuru/chat-app:latest'
-        PATH = "/usr/local/bin/docker:${PATH}"
     }
 
     stages {
@@ -37,7 +36,7 @@ pipeline {
             steps {
                 echo 'Deploying...'
                 // This is a basic Docker run. Depending on your deployment target, this might be different.
-                sh "docker run -d -p 8080:8080 ${DOCKER_IMAGE}"
+                sh 'argocd app sync chat-app'
             }
         }
     }
