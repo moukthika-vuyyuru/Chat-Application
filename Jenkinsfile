@@ -10,6 +10,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIAL_ID = 'docker-cred'
         DOCKER_IMAGE = 'moukthikavuyyuru/chat-app:latest'
+        PATH = "/usr/local/bin/docker:${PATH}"
     }
 
     stages {
