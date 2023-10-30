@@ -3,6 +3,8 @@ pipeline {
 
     tools{
         maven 'maven'
+        git 'git'
+        jdk 'jdk'
     }
 
     environment {
