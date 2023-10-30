@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools{
+        maven 'maven'
+    }
+
     environment {
         DOCKER_CREDENTIAL_ID = 'docker-cred'
         DOCKER_IMAGE = 'moukthikavuyyuru/chat-app:latest'
