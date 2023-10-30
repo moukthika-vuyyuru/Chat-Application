@@ -7,42 +7,37 @@ pipeline {
         jdk 'jdk'
     }
 
+    environment {
+        DOCKER_CREDENTIAL_ID = 'docker-cred'
+        DOCKER_IMAGE = 'moukthikavuyyuru/chat-app:latest'
+    }
+
     stages {
         stage('Build & Test') {
             steps {
                 echo 'Building and Testing...'
-                echo "The Jenkins job name is: ${env.JOB_NAME}"
                 sh 'mvn clean install'
-                sh 'mvn clean package'
             }
         }
 
-        stage('Packing the App') {
+        stage('Build & Push Docker Image') {
             steps {
-                sh 'mvn clean package'
+                echo 'Building Docker Image...'
+                sh "docker build -t ${DOCKER_IMAGE} ."
+                
+                echo 'Pushing Docker Image to DockerHub...'
+                withDockerRegistry([credentialsId: "${DOCKER_CREDENTIAL_ID}", url: ""]) {
+                    sh "docker push ${DOCKER_IMAGE}"
+                }
             }
         }
 
         stage('Deploy') {
-        steps {
-            script {
+            steps {
                 echo 'Deploying...'
-
-                // Use the Jenkins Credentials Binding Plugin
-                withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'DOCKER_HUB_USER', passwordVariable: 'DOCKER_HUB_PASS')]) {
-
-                    // Log in to Docker Hub using the bound credentials
-                    sh "docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS"
-
-                    // Pull the Docker image from Docker Hub
-                    sh "docker pull moukthikavuyyuru/chat-app:latest"
-
-                    // Run the Docker image
-                    sh "docker run -d -p 8081:8080 moukthikavuyyuru/chat-app:latest"
-                }
+                // This is a basic Docker run. Depending on your deployment target, this might be different.
+                sh "docker run -d -p 8080:8080 ${DOCKER_IMAGE}"
             }
         }
-    }
-
     }
 }
