@@ -11,6 +11,7 @@ pipeline {
         stage('Build & Test') {
             steps {
                 echo 'Building and Testing...'
+                echo "The Jenkins job name is: ${env.JOB_NAME}"
                 sh 'mvn clean install'
                 sh 'mvn clean package'
             }
