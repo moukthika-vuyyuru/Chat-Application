@@ -28,7 +28,7 @@ pipeline {
                 // Deploy the Spring Boot application
                 script {
                     withEnv(['JENKINS_NODE_COOKIE=dontKill']){
-                        sh 'nohup java -jar target/chatroomapplication-0.0.1-SNAPSHOT.jar &'
+                       sh 'nohup java -jar target/chatroomapplication-0.0.1-SNAPSHOT.jar > my-app.log 2>&1 &'
                     }
                 }
             }
