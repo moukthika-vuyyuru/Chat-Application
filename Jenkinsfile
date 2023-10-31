@@ -7,36 +7,30 @@ pipeline {
         jdk 'jdk'
     }
 
-    environment {
-        DOCKER_CREDENTIAL_ID = 'docker-cred'
-        DOCKER_IMAGE = 'moukthikavuyyuru/chat-app:latest'
-    }
-
     stages {
         stage('Build & Test') {
             steps {
                 echo 'Building and Testing...'
+                echo "The Jenkins job name is: ${env.JOB_NAME}"
                 sh 'mvn clean install'
+                sh 'mvn clean package'
             }
         }
 
-        stage('Build & Push Docker Image') {
+        stage('Packing the App') {
             steps {
-                echo 'Building Docker Image...'
-                sh "docker build -t ${DOCKER_IMAGE} ."
-                
-                echo 'Pushing Docker Image to DockerHub...'
-                withDockerRegistry([credentialsId: "${DOCKER_CREDENTIAL_ID}", url: ""]) {
-                    sh "docker push ${DOCKER_IMAGE}"
-                }
+                sh 'mvn clean package'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying...'
-                // This is a basic Docker run. Depending on your deployment target, this might be different.
-                sh 'argocd app sync chat-app'
+                // Deploy the Spring Boot application
+                script {
+                    withEnv(['JENKINS_NODE_COOKIE=dontKill']){
+                        sh 'nohup java -jar target/chatroomapplication-0.0.1-SNAPSHOT.jar &'
+                    }
+                }
             }
         }
     }
