@@ -17,7 +17,7 @@ To run the Chat Room Application, follow these steps:
 2. Open a terminal and navigate to the project directory.
 3. Run the following command to start the Spring Boot application:
 ```./mvnw spring-boot:run```
-or if you are using Maven directly,
+or if you are using Maven directly
 ```mvn spring-boot:run```
 
 Alternatively, you can run the application from your IDE by importing the project and running it directly.
