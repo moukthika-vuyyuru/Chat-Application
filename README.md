@@ -11,7 +11,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Running the Chat Room Application
 
-To run the Chat Room Application, follow these steps:
+To run the Chat Room Application follow these steps:
 
 1. Clone the repository to your local machine or download the source code.
 2. Open a terminal and navigate to the project directory.
